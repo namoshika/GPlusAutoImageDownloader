@@ -11,24 +11,24 @@ namespace GPlusImageDownloader.Model
 
     class ImageDownloaderContainer : IDisposable
     {
-        public ImageDownloaderContainer()
+        public ImageDownloaderContainer(SettingManager setting)
         {
             DownloadJobs = new List<ImageDownloader>();
-            ImageDirectory = new System.IO.DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\testFolder");
-            ImageHashsFile = new System.IO.FileInfo(ImageDirectory.FullName + "\\imgHashs.xml");
-            _formatter = new System.Xml.Serialization.XmlSerializer(typeof(HashSet<string>));
+            Setting = setting;
         }
+        ~ImageDownloaderContainer()
+        { Dispose(); }
         PlatformClient _client;
         IDisposable _stream;
-        System.Xml.Serialization.XmlSerializer _formatter;
-        public System.IO.FileInfo ImageHashsFile { get; private set; }
-        public System.IO.DirectoryInfo ImageDirectory { get; private set; }
-        public HashSet<string> ImageHashs { get; private set; }
-        public List<ImageDownloader> DownloadJobs { get; private set; }
 
-        public async void StartDownload()
+        public List<ImageDownloader> DownloadJobs { get; private set; }
+        public SettingManager Setting { get; private set; }
+
+        public void StartDownload(System.Net.CookieContainer cookies)
         {
-            await Initialize();
+            _client = new PlatformClient(cookies);
+            if (_stream != null)
+                _stream.Dispose();
 
             _stream = _client.GetStream()
                 .OfType<CommentInfo>()
@@ -51,38 +51,11 @@ namespace GPlusImageDownloader.Model
                     },
                     exp => Console.WriteLine("Excp: {0}", exp.Message));
         }
-        System.Threading.Tasks.Task Initialize()
+        public void Dispose()
         {
-            return System.Threading.Tasks.Task.Factory.StartNew(() =>
-                {
-                    var cookiePath = new System.IO.FileInfo("cookies");
-                    var vals = System.Xml.Linq.XDocument.Load("IGNORE_DATAS.xml").Root;
-                    var mail = vals.Element("mail").Value;
-                    var pass = vals.Element("password").Value;
-                    System.Net.CookieContainer cookies;
-
-                    var serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    if (cookiePath.Exists)
-                    {
-                        using (var strm = cookiePath.OpenRead())
-                            cookies = (System.Net.CookieContainer)serializer.Deserialize(strm);
-                    }
-                    else
-                    {
-                        var cookie = new System.Net.CookieContainer();
-                        SunokoLibrary.GooglePlus.Primitive.ApiWrapper.ConnectToServiceLoginAuth(mail, pass, cookie);
-                        using (var strm = cookiePath.OpenWrite())
-                            serializer.Serialize(strm, cookie);
-                        cookies = cookie;
-                    }
-                    _client = new PlatformClient(cookies);
-
-                    if (ImageHashsFile.Exists)
-                        using (var reader = ImageHashsFile.OpenRead())
-                            ImageHashs = (HashSet<string>)_formatter.Deserialize(reader);
-                    else
-                        ImageHashs = new HashSet<string>();
-                });
+            System.GC.SuppressFinalize(this);
+            if (_stream != null)
+                _stream.Dispose();
         }
 
         public event DownloadingImageEventHandler AddedDownloadingImage;
@@ -92,16 +65,16 @@ namespace GPlusImageDownloader.Model
                 AddedDownloadingImage(this, e);
         }
 
-        public void Dispose()
+        public static bool CheckCanAuth(string mail, string pass, out System.Net.CookieContainer cookies)
         {
-            System.GC.SuppressFinalize(this);
-            if (_stream != null)
-                _stream.Dispose();
-            using (var writter = ImageHashsFile.OpenWrite())
-                _formatter.Serialize(writter, ImageHashs);
+            cookies = new System.Net.CookieContainer();
+            return SunokoLibrary.GooglePlus.Primitive.ApiWrapper
+                .ConnectToServiceLoginAuth(mail, pass, cookies);
         }
-        ~ImageDownloaderContainer()
-        { Dispose(); }
+        public static bool CheckCanAuth(System.Net.CookieContainer cookies)
+        {
+            return cookies.GetCookies(new Uri("https://plus.google.com"))["SSID"] != null;
+        }
     }
     delegate void DownloadingImageEventHandler(object sender, DownloadingImageEventArgs e);
     class DownloadingImageEventArgs : EventArgs

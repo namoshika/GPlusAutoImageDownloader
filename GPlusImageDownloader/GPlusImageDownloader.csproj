@@ -103,16 +103,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\MainWindowModel.cs" />
     <Compile Include="Model\ImageDownloader.cs" />
     <Compile Include="Model\ImageDownloaderContainer.cs" />
+    <Compile Include="Model\SettingManager.cs" />
     <Compile Include="ViewModel\Base\JobActivityGroupViewModelBase.cs" />
     <Compile Include="ViewModel\Base\JobContainerViewModelBase.cs" />
     <Compile Include="ViewModel\Base\JobViewModelBase.cs" />
+    <Compile Include="ViewModel\Base\MainWindowViewModelBase.cs" />
     <Compile Include="ViewModel\Base\NoticeItemBase.cs" />
+    <Compile Include="ViewModel\Base\SettingViewModelBase.cs" />
     <Compile Include="ViewModel\JobActivityGroupViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\JobViewModel.cs" />
     <Compile Include="ViewModel\JobContainerViewModel.cs" />
+    <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -135,21 +141,11 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -157,12 +153,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="IGNORE_DATAS.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
     <Resource Include="Resources\delete.png" />
     <Resource Include="license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\downloads.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,12 +26,11 @@ namespace GPlusImageDownloader
 #if ENABLED_VMTEST_MODE
             DataContext = FindResource("testVm");
 #else
-            _downloader = new Model.ImageDownloaderContainer();
-            var downloaderVm = new ViewModel.JobContainerViewModel(_downloader);
-            DataContext = downloaderVm;
+            _downloader = new Model.MainWindowModel();
+            DataContext = new ViewModel.MainWindowViewModel(_downloader);
             _downloader.StartDownload();
 #endif
-            Closed += new EventHandler(MainWindow_Closed);
+            Closed += MainWindow_Closed;
         }
 
         void MainWindow_Closed(object sender, EventArgs e)
@@ -39,6 +38,6 @@ namespace GPlusImageDownloader
             if (_downloader != null)
                 _downloader.Dispose();
         }
-        Model.ImageDownloaderContainer _downloader;
+        Model.MainWindowModel _downloader;
     }
 }

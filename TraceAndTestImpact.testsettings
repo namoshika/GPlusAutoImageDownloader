@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestSettings name="トレースおよびテストの影響" id="b65bf625-78b4-434e-9353-910b3911318d" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Description>これらは、トレースおよびテストの影響のテスト設定です。</Description>
+  <Execution>
+    <TestTypeSpecific />
+    <AgentRule name="Execution Agents">
+    </AgentRule>
+  </Execution>
+</TestSettings>

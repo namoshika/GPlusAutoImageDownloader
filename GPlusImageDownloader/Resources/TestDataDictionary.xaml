@@ -1,53 +1,63 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:GPlusImageDownloader.ViewModel">
-    <local:JobContainerViewModelBase x:Key="testVm">
-        <local:JobContainerViewModelBase.JobActivityGroups>
-            <local:JobActivityGroupViewModelBase
+    <local:MainWindowViewModelBase x:Key="testVm">
+        <local:MainWindowViewModelBase.JobContainer>
+            <local:JobContainerViewModelBase>
+                <local:JobContainerViewModelBase.JobActivityGroups>
+                    <local:JobActivityGroupViewModelBase
                         ActivityUrl="https://plus.google.com/u/0/105405775630538810988/posts/Q2dKDzridU2"
                         NoticeText="ミラノ">
-                <local:JobActivityGroupViewModelBase.NoticeIcon>
-                    <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
-                </local:JobActivityGroupViewModelBase.NoticeIcon>
-                <local:JobActivityGroupViewModelBase.DownloadImageJobs>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                </local:JobActivityGroupViewModelBase.DownloadImageJobs>
-            </local:JobActivityGroupViewModelBase>
-            <local:JobActivityGroupViewModelBase
+                        <local:JobActivityGroupViewModelBase.NoticeIcon>
+                            <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
+                        </local:JobActivityGroupViewModelBase.NoticeIcon>
+                        <local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                        </local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                    </local:JobActivityGroupViewModelBase>
+                    <local:JobActivityGroupViewModelBase
                         ActivityUrl="https://plus.google.com/u/0/105405775630538810988/posts/Q2dKDzridU2"
                         NoticeText="ミラノ">
-                <local:JobActivityGroupViewModelBase.NoticeIcon>
-                    <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
-                </local:JobActivityGroupViewModelBase.NoticeIcon>
-                <local:JobActivityGroupViewModelBase.DownloadImageJobs>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                </local:JobActivityGroupViewModelBase.DownloadImageJobs>
-            </local:JobActivityGroupViewModelBase>
-            <local:JobActivityGroupViewModelBase
+                        <local:JobActivityGroupViewModelBase.NoticeIcon>
+                            <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
+                        </local:JobActivityGroupViewModelBase.NoticeIcon>
+                        <local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                        </local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                    </local:JobActivityGroupViewModelBase>
+                    <local:JobActivityGroupViewModelBase
                         ActivityUrl="https://plus.google.com/u/0/105405775630538810988/posts/Q2dKDzridU2"
                         NoticeText="ミラノ">
-                <local:JobActivityGroupViewModelBase.NoticeIcon>
-                    <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
-                </local:JobActivityGroupViewModelBase.NoticeIcon>
-                <local:JobActivityGroupViewModelBase.DownloadImageJobs>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                </local:JobActivityGroupViewModelBase.DownloadImageJobs>
-            </local:JobActivityGroupViewModelBase>
-        </local:JobContainerViewModelBase.JobActivityGroups>
-    </local:JobContainerViewModelBase>
+                        <local:JobActivityGroupViewModelBase.NoticeIcon>
+                            <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
+                        </local:JobActivityGroupViewModelBase.NoticeIcon>
+                        <local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                            <local:JobViewModelBase DownloadStatus="Loaded">
+                                <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                            </local:JobViewModelBase>
+                        </local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                    </local:JobActivityGroupViewModelBase>
+                </local:JobContainerViewModelBase.JobActivityGroups>
+            </local:JobContainerViewModelBase>
+        </local:MainWindowViewModelBase.JobContainer>
+        <local:MainWindowViewModelBase.Setting>
+            <local:SettingViewModelBase
+                EmailAddress="mail" Password="pwd" ImageSaveDirectory="dir"
+                IsError="False" IsExpanded="False" IsModified="False" />
+        </local:MainWindowViewModelBase.Setting>
+    </local:MainWindowViewModelBase>
+    
 </ResourceDictionary>

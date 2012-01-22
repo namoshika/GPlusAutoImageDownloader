@@ -51,8 +51,8 @@ namespace GPlusImageDownloader.Model
 
                         HashText = hashBuilder.ToString();
                         DownloadedTempImageFile = tmpFile;
-                        var imgFile = new System.IO.FileInfo(_container.ImageDirectory.FullName + "\\" + HashText + ".jpg");
-                        if (_container.ImageHashs.Add(HashText) && !imgFile.Exists)
+                        var imgFile = new System.IO.FileInfo(_container.Setting.ImageSaveDirectory.FullName + "\\" + HashText + ".jpg");
+                        if (_container.Setting.ImageHashList.Add(HashText) && !imgFile.Exists)
                         {
                             imgFile = tmpFile.CopyTo(imgFile.FullName);
                             Status = DownloadStatus.Loaded;
