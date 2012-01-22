@@ -1,0 +1,6 @@
+*/bin/
+*/obj/
+*.suo
+/TestResults
+/SLGglPls_Test/cookies
+IGNORE_DATAS.xml
