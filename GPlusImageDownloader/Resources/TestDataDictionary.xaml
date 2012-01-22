@@ -13,10 +13,18 @@
                     <local:JobViewModelBase DownloadStatus="Loaded">
                         <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
+                    <local:JobViewModelBase DownloadStatus="Loading" />
+                    <local:JobViewModelBase DownloadStatus="Failed" />
+                </local:JobActivityGroupViewModelBase.DownloadImageJobs>
+            </local:JobActivityGroupViewModelBase>
+            <local:JobActivityGroupViewModelBase
+                        ActivityUrl="https://plus.google.com/u/0/105405775630538810988/posts/Q2dKDzridU2"
+                        NoticeText="ミラノ">
+                <local:JobActivityGroupViewModelBase.NoticeIcon>
+                    <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
+                </local:JobActivityGroupViewModelBase.NoticeIcon>
+                <local:JobActivityGroupViewModelBase.DownloadImageJobs>
+                    <local:JobViewModelBase DownloadStatus="Deleted">
                         <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>
                 </local:JobActivityGroupViewModelBase.DownloadImageJobs>
@@ -28,21 +36,7 @@
                     <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
                 </local:JobActivityGroupViewModelBase.NoticeIcon>
                 <local:JobActivityGroupViewModelBase.DownloadImageJobs>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
-                </local:JobActivityGroupViewModelBase.DownloadImageJobs>
-            </local:JobActivityGroupViewModelBase>
-            <local:JobActivityGroupViewModelBase
-                        ActivityUrl="https://plus.google.com/u/0/105405775630538810988/posts/Q2dKDzridU2"
-                        NoticeText="ミラノ">
-                <local:JobActivityGroupViewModelBase.NoticeIcon>
-                    <BitmapImage UriSource="https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg" />
-                </local:JobActivityGroupViewModelBase.NoticeIcon>
-                <local:JobActivityGroupViewModelBase.DownloadImageJobs>
-                    <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
-                    </local:JobViewModelBase>
+                    <local:JobViewModelBase DownloadStatus="Unloaded" />
                     <local:JobViewModelBase DownloadStatus="Loaded">
                         <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>

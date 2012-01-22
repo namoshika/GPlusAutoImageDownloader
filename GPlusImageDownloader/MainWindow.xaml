@@ -23,30 +23,93 @@
                         </StackPanel>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type local:JobViewModelBase}">
-                        <ContentControl Focusable="False" Name="imgBorder" Margin="0,0,0,0">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:EventTrigger.Actions>
-                                        <i:InvokeCommandAction Command="{Binding OpenImageCommand}" />
-                                    </i:EventTrigger.Actions>
-                                </i:EventTrigger>
-                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="true">
-                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
-                                        <ei:ChangePropertyAction.Value>
-                                            <DropShadowEffect Color="Blue" Direction="315" Opacity="1" BlurRadius="8" ShadowDepth="0" />
-                                        </ei:ChangePropertyAction.Value>
-                                    </ei:ChangePropertyAction>
-                                </ei:DataTrigger>
-                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="false">
-                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
-                                        <ei:ChangePropertyAction.Value>
-                                            <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
-                                        </ei:ChangePropertyAction.Value>
-                                    </ei:ChangePropertyAction>
-                                </ei:DataTrigger>
-                            </i:Interaction.Triggers>
-                            <Image Width="250" Height="80" Stretch="UniformToFill" Source="{Binding ImageThumbPath}" />
-                        </ContentControl>
+                        <Grid Width="250" Height="80">
+                            <ContentControl Name="imgBorder" Focusable="False" Margin="0,0,0,0">
+                                <Image Name="thumb" Source="{Binding ImageThumbPath}">
+                                    <!--サムネイル非選択状態-->
+                                    <Image.Effect>
+                                        <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
+                                    </Image.Effect>
+                                </Image>
+                                <i:Interaction.Triggers>
+                                    <!--ダブルクリック時-->
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:EventTrigger.Actions>
+                                            <i:InvokeCommandAction Command="{Binding OpenImageCommand}" />
+                                        </i:EventTrigger.Actions>
+                                    </i:EventTrigger>
+                                    <!--サムネイルの選択、非選択状態-->
+                                    <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="true">
+                                        <ei:ChangePropertyAction PropertyName="Effect" TargetName="thumb">
+                                            <ei:ChangePropertyAction.Value>
+                                                <DropShadowEffect Color="Blue" Direction="315" Opacity="1" BlurRadius="8" ShadowDepth="0" />
+                                            </ei:ChangePropertyAction.Value>
+                                        </ei:ChangePropertyAction>
+                                    </ei:DataTrigger>
+                                    <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="false">
+                                        <ei:ChangePropertyAction PropertyName="Effect" TargetName="thumb">
+                                            <ei:ChangePropertyAction.Value>
+                                                <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
+                                            </ei:ChangePropertyAction.Value>
+                                        </ei:ChangePropertyAction>
+                                    </ei:DataTrigger>
+                                </i:Interaction.Triggers>
+                            </ContentControl>
+                            <Label Name="statusLabel" Foreground="#909090" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding DownloadStatus}" />
+                        </Grid>
+                        <DataTemplate.Resources>
+                            <!--loading時のstatusLabel点滅挙動の定義-->
+                            <Storyboard x:Key="labelOpacityStoryboard" AutoReverse="True">
+                                <DoubleAnimationUsingKeyFrames
+                                        RepeatBehavior="Forever" Storyboard.TargetName="statusLabel" Storyboard.TargetProperty="Opacity">
+                                    <DoubleKeyFrameCollection>
+                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0.1" Value="1" />
+                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0.2" Value="0" />
+                                    </DoubleKeyFrameCollection>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <!--loaded時のstatusLabelの消滅と画像出現の定義-->
+                            <Storyboard x:Key="imageAppearStoryboard">
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusLabel" Storyboard.TargetProperty="Visibility">
+                                    <ObjectKeyFrameCollection>
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.8" Value="{x:Static Visibility.Collapsed}" />
+                                    </ObjectKeyFrameCollection>
+                                </ObjectAnimationUsingKeyFrames>
+                                <DoubleAnimation Storyboard.TargetName="statusLabel" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.8" />
+                                <DoubleAnimation Storyboard.TargetName="imgBorder" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8" />
+                            </Storyboard>
+                            <!--delete時の画像出現の定義-->
+                            <Storyboard x:Key="deletedStoryboard">
+                                <DoubleAnimation Storyboard.TargetName="imgBorder" Storyboard.TargetProperty="Opacity" From="0" To="0.5" Duration="0:0:0.4" />
+                            </Storyboard>
+                        </DataTemplate.Resources>
+                        <DataTemplate.Triggers>
+                            <!--VM.DownloadStatusの変化に合わせたアニメーションを定義-->
+                            <DataTrigger Binding="{Binding DownloadStatus}" Value="Loading">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Name="statusLabelAnime" Storyboard="{StaticResource labelOpacityStoryboard}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DownloadStatus}" Value="Loaded">
+                                <DataTrigger.EnterActions>
+                                    <StopStoryboard BeginStoryboardName="statusLabelAnime" />
+                                    <BeginStoryboard Storyboard="{StaticResource imageAppearStoryboard}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DownloadStatus}" Value="Failed">
+                                <DataTrigger.EnterActions>
+                                    <StopStoryboard BeginStoryboardName="statusLabelAnime" />
+                                </DataTrigger.EnterActions>
+                                <Setter TargetName="statusLabel" Property="Foreground" Value="#d02020" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DownloadStatus}" Value="Deleted">
+                                <DataTrigger.EnterActions>
+                                    <StopStoryboard BeginStoryboardName="statusLabelAnime" />
+                                    <BeginStoryboard Storyboard="{StaticResource deletedStoryboard}" />
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                     <ControlTemplate x:Key="treeViewRootTemplate" TargetType="{x:Type TreeView}">
                         <Grid Background="Gray">
