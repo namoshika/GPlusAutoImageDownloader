@@ -36,9 +36,11 @@ namespace GPlusImageDownloader.Model
                 .Distinct(commentInfo => commentInfo.ParentActivity.Id)
                 .Select(commentInfo => commentInfo.ParentActivity.UpdateActivityAsync(false).Result)
                 .Where(activityInfo => activityInfo.PostStatus != PostStatusType.Removed && activityInfo.AttachedContentType == ContentType.Image)
-                .Select(activityInfo => new {
+                .Select(activityInfo => new
+                {
                     ActivityInfo = activityInfo,
-                    ImageInfos = ((AttachedAlbum)activityInfo.AttachedContent).Pictures })
+                    ImageInfos = ((AttachedAlbum)activityInfo.AttachedContent).Pictures
+                })
                 .Subscribe(item =>
                     {
                         var imgs = item.ImageInfos.Select(inf => new ImageDownloader(this, inf)).ToArray();
@@ -49,18 +51,38 @@ namespace GPlusImageDownloader.Model
                     },
                     exp => Console.WriteLine("Excp: {0}", exp.Message));
         }
-        async System.Threading.Tasks.Task Initialize()
+        System.Threading.Tasks.Task Initialize()
         {
-            var vals = System.Xml.Linq.XDocument.Load("IGNORE_DATAS.xml").Root;
-            var mail = vals.Element("mail").Value;
-            var pass = vals.Element("password").Value;
-            _client = await PlatformClient.Login(mail, pass);
+            return System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    var cookiePath = new System.IO.FileInfo("cookies");
+                    var vals = System.Xml.Linq.XDocument.Load("IGNORE_DATAS.xml").Root;
+                    var mail = vals.Element("mail").Value;
+                    var pass = vals.Element("password").Value;
+                    System.Net.CookieContainer cookies;
 
-            if (ImageHashsFile.Exists)
-                using (var reader = ImageHashsFile.OpenRead())
-                    ImageHashs = (HashSet<string>)_formatter.Deserialize(reader);
-            else
-                ImageHashs = new HashSet<string>();
+                    var serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    if (cookiePath.Exists)
+                    {
+                        using (var strm = cookiePath.OpenRead())
+                            cookies = (System.Net.CookieContainer)serializer.Deserialize(strm);
+                    }
+                    else
+                    {
+                        var cookie = new System.Net.CookieContainer();
+                        SunokoLibrary.GooglePlus.Primitive.ApiWrapper.ConnectToServiceLoginAuth(mail, pass, cookie);
+                        using (var strm = cookiePath.OpenWrite())
+                            serializer.Serialize(strm, cookie);
+                        cookies = cookie;
+                    }
+                    _client = new PlatformClient(cookies);
+
+                    if (ImageHashsFile.Exists)
+                        using (var reader = ImageHashsFile.OpenRead())
+                            ImageHashs = (HashSet<string>)_formatter.Deserialize(reader);
+                    else
+                        ImageHashs = new HashSet<string>();
+                });
         }
 
         public event DownloadingImageEventHandler AddedDownloadingImage;
