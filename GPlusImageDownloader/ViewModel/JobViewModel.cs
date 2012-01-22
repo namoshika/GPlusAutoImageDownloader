@@ -21,11 +21,12 @@ namespace GPlusImageDownloader.ViewModel
                 obj => _model.Open(),
                 obj =>
                     {
+                        if (_model.DownloadedImageFile == null)
+                            return false;
+
                         _model.DownloadedImageFile.Refresh();
                         return _model.DownloadedImageFile != null && model.DownloadedImageFile.Exists;
                     });
-
-            _model_ChangedTaskStatus(null, null);
         }
         ImageDownloader _model;
         JobContainerViewModel _container;
