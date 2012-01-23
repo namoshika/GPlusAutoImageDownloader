@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPlusImageDownloader", "GPlusImageDownloader\GPlusImageDownloader.csproj", "{B8E10142-1522-419C-A8A9-20FBEFCA2382}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_GPlusImageDownloader", "Test_GPlusImageDownloader\Test_GPlusImageDownloader.csproj", "{F697FB10-245C-4943-874F-03B928BE6819}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = GooglePlusLibrary.vsmdi
@@ -37,6 +39,18 @@ Global
 		{B8E10142-1522-419C-A8A9-20FBEFCA2382}.TestMode|x64.Build.0 = Debug|x64
 		{B8E10142-1522-419C-A8A9-20FBEFCA2382}.TestMode|x86.ActiveCfg = TestMode|x86
 		{B8E10142-1522-419C-A8A9-20FBEFCA2382}.TestMode|x86.Build.0 = TestMode|x86
+		{F697FB10-245C-4943-874F-03B928BE6819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Release|x64.ActiveCfg = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.Release|x86.ActiveCfg = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.TestMode|Any CPU.ActiveCfg = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.TestMode|Any CPU.Build.0 = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.TestMode|x64.ActiveCfg = Release|Any CPU
+		{F697FB10-245C-4943-874F-03B928BE6819}.TestMode|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
