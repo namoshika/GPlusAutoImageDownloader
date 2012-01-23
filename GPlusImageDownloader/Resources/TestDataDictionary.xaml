@@ -11,7 +11,7 @@
                 </local:JobActivityGroupViewModelBase.NoticeIcon>
                 <local:JobActivityGroupViewModelBase.DownloadImageJobs>
                     <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                        <local:JobViewModelBase.ImageThumbPath>/Resources/testThumb.png</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>
                     <local:JobViewModelBase DownloadStatus="Loading" />
                     <local:JobViewModelBase DownloadStatus="Failed" />
@@ -25,7 +25,7 @@
                 </local:JobActivityGroupViewModelBase.NoticeIcon>
                 <local:JobActivityGroupViewModelBase.DownloadImageJobs>
                     <local:JobViewModelBase DownloadStatus="Deleted">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                        <local:JobViewModelBase.ImageThumbPath>/Resources/testThumb.png</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>
                 </local:JobActivityGroupViewModelBase.DownloadImageJobs>
             </local:JobActivityGroupViewModelBase>
@@ -38,7 +38,7 @@
                 <local:JobActivityGroupViewModelBase.DownloadImageJobs>
                     <local:JobViewModelBase DownloadStatus="Unloaded" />
                     <local:JobViewModelBase DownloadStatus="Loaded">
-                        <local:JobViewModelBase.ImageThumbPath>https://lh6.googleusercontent.com/-tzbxiejd34M/AAAAAAAAAAI/AAAAAAAABMA/0FSpTEOxT_o/s48-c-k/photo.jpg</local:JobViewModelBase.ImageThumbPath>
+                        <local:JobViewModelBase.ImageThumbPath>/Resources/testThumb.png</local:JobViewModelBase.ImageThumbPath>
                     </local:JobViewModelBase>
                 </local:JobActivityGroupViewModelBase.DownloadImageJobs>
             </local:JobActivityGroupViewModelBase>
