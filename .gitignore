@@ -2,5 +2,7 @@
 */obj/
 *.suo
 /TestResults
-/SLGglPls_Test/cookies
+/GPlusImageDownloader/config.xml
 IGNORE_DATAS.xml
+config.xml
+cookies

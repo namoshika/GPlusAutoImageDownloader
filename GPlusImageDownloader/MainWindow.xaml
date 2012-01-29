@@ -10,44 +10,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/TestDataDictionary.xaml" />
                 <ResourceDictionary>
-                    <DataTemplate DataType="{x:Type local:JobActivityGroupViewModelBase}">
-                        <!--投稿者情報-->
-                        <StackPanel Orientation="Horizontal" Margin="0">
-                            <ContentControl Focusable="False" Width="25" Height="25">
-                                <Image Source="{Binding NoticeIcon}" />
-                                <ContentControl.Effect>
-                                    <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
-                                </ContentControl.Effect>
-                            </ContentControl>
-                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding NoticeText}" />
-                        </StackPanel>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type local:JobViewModelBase}">
-                        <ContentControl Focusable="False" Name="imgBorder" Margin="0,0,0,0">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDoubleClick">
-                                    <i:EventTrigger.Actions>
-                                        <i:InvokeCommandAction Command="{Binding OpenImageCommand}" />
-                                    </i:EventTrigger.Actions>
-                                </i:EventTrigger>
-                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="true">
-                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
-                                        <ei:ChangePropertyAction.Value>
-                                            <DropShadowEffect Color="Blue" Direction="315" Opacity="1" BlurRadius="8" ShadowDepth="0" />
-                                        </ei:ChangePropertyAction.Value>
-                                    </ei:ChangePropertyAction>
-                                </ei:DataTrigger>
-                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="false">
-                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
-                                        <ei:ChangePropertyAction.Value>
-                                            <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
-                                        </ei:ChangePropertyAction.Value>
-                                    </ei:ChangePropertyAction>
-                                </ei:DataTrigger>
-                            </i:Interaction.Triggers>
-                            <Image Width="250" Height="80" Stretch="UniformToFill" Source="{Binding ImageThumbPath}" />
-                        </ContentControl>
-                    </DataTemplate>
                     <ControlTemplate x:Key="treeViewRootTemplate" TargetType="{x:Type TreeView}">
                         <Grid Background="Gray">
                             <Rectangle VerticalAlignment="Bottom" Height="20">
@@ -59,16 +21,17 @@
                                     </LinearGradientBrush>
                                 </Rectangle.Fill>
                             </Rectangle>
-                            <ScrollViewer >
-                                <Grid>
+                            <ScrollViewer>
+                                <Grid Name="itemArrayShadow">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto" />
                                         <RowDefinition Height="20" />
                                     </Grid.RowDefinitions>
                                     <Grid Background="White" Grid.Row="0">
-                                        <ItemsPresenter />
+                                        <ItemsPresenter Margin="0,8,0,0" />
                                     </Grid>
-                                    <Rectangle Name="itemArrayShadow" Grid.Row="1">
+                                    <!--背景の灰色なグラデーション-->
+                                    <Rectangle Grid.Row="1">
                                         <Rectangle.Fill>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                                 <GradientStop Color="#66000000" Offset="0" />
@@ -79,31 +42,39 @@
                                     </Rectangle>
                                 </Grid>
                             </ScrollViewer>
+                            <!--メニューバーの影-->
+                            <Rectangle Name="menuShaddow" VerticalAlignment="Top" Height="3">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#30000000" Offset="0" />
+                                        <GradientStop Color="#10000000" Offset="0.5" />
+                                        <GradientStop Color="#00000000" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasItems" Value="true">
                                 <Setter TargetName="itemArrayShadow" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="menuShaddow" Property="Visibility" Value="Visible" />
                             </Trigger>
                             <Trigger Property="HasItems" Value="false">
                                 <Setter TargetName="itemArrayShadow" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="menuShaddow" Property="Visibility" Value="Collapsed" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                     <ControlTemplate x:Key="parentItemTemplate" TargetType="TreeViewItem" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-                        <Border BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                        <Border BorderBrush="LightGray" BorderThickness="0,1,0,0">
                             <Grid Margin="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="Bd" SnapsToDevicePixels="True" Grid.Column="0">
+                                <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="Bd" SnapsToDevicePixels="True">
                                     <ContentPresenter Content="{TemplateBinding HeaderedContentControl.Header}" ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}" ContentSource="Header" Name="PART_Header" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </Border>
-                                <ItemsPresenter Name="ItemsHost" Margin="15,0,0,0" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />
+                                <ItemsPresenter Name="ItemsHost" Margin="15,0,0,0" Grid.Row="1" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -149,35 +120,179 @@
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
+                    <DataTemplate DataType="{x:Type local:JobContainerViewModelBase}">
+                        <TreeView Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                  Template="{StaticResource treeViewRootTemplate}"
+                                  ItemsSource="{Binding JobActivityGroups}">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="ItemsSource" Value="{Binding DownloadImageJobs}" />
+                                    <Setter Property="IsExpanded" Value="True" />
+                                    <Setter Property="Template" Value="{StaticResource parentItemTemplate}" />
+                                    <Setter Property="ItemContainerStyle">
+                                        <Setter.Value>
+                                            <Style TargetType="{x:Type TreeViewItem}">
+                                                <Setter Property="Template" Value="{StaticResource childItemTemplate}" />
+                                            </Style>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="ItemsPanel">
+                                        <Setter.Value>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" />
+                                            </ItemsPanelTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                        </TreeView>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type local:JobActivityGroupViewModelBase}">
+                        <!--投稿者情報-->
+                        <StackPanel Orientation="Horizontal" Margin="0">
+                            <ContentControl Focusable="False" Width="25" Height="25">
+                                <Image Source="{Binding NoticeIcon}" />
+                                <ContentControl.Effect>
+                                    <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
+                                </ContentControl.Effect>
+                            </ContentControl>
+                            <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding NoticeText}" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type local:NoticeItemBase}">
+                        <!--通知情報-->
+                        <TextBlock Margin="0" TextWrapping="Wrap" Text="{Binding NoticeText}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type local:JobViewModelBase}">
+                        <ContentControl Focusable="False" Name="imgBorder" Margin="0,0,0,0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:EventTrigger.Actions>
+                                        <i:InvokeCommandAction Command="{Binding OpenImageCommand}" />
+                                    </i:EventTrigger.Actions>
+                                </i:EventTrigger>
+                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="true">
+                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
+                                        <ei:ChangePropertyAction.Value>
+                                            <DropShadowEffect Color="Blue" Direction="315" Opacity="1" BlurRadius="8" ShadowDepth="0" />
+                                        </ei:ChangePropertyAction.Value>
+                                    </ei:ChangePropertyAction>
+                                </ei:DataTrigger>
+                                <ei:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="false">
+                                    <ei:ChangePropertyAction PropertyName="Effect" TargetName="imgBorder">
+                                        <ei:ChangePropertyAction.Value>
+                                            <DropShadowEffect Color="Black" Direction="315" Opacity="0.3" BlurRadius="5" ShadowDepth="0" />
+                                        </ei:ChangePropertyAction.Value>
+                                    </ei:ChangePropertyAction>
+                                </ei:DataTrigger>
+                            </i:Interaction.Triggers>
+                            <Image Width="250" Height="80" Stretch="UniformToFill" Source="{Binding ImageThumbPath}" />
+                        </ContentControl>
+                    </DataTemplate>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <TreeView Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  Template="{StaticResource treeViewRootTemplate}"
-                  ItemsSource="{Binding JobActivityGroups}">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="ItemsSource" Value="{Binding DownloadImageJobs}" />
-                    <Setter Property="IsExpanded" Value="True" />
-                    <Setter Property="Template" Value="{StaticResource parentItemTemplate}" />
-                    <Setter Property="ItemContainerStyle">
-                        <Setter.Value>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="Template" Value="{StaticResource childItemTemplate}" />
-                            </Style>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="ItemsPanel">
-                        <Setter.Value>
-                            <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True" />
-                            </ItemsPanelTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
+        <Grid.Resources>
+            <Storyboard x:Key="expandOptionPanelStoryboard">
+                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="0" To="200" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
+            </Storyboard>
+            <Storyboard x:Key="dexpandOptionPanelStoryboard">
+                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="200" To="0" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
+            </Storyboard>
+            <local:SettingStatusToBooleanConverter x:Key="statusToBooleanConverter" />
+        </Grid.Resources>
+        <DockPanel>
+            <Rectangle DockPanel.Dock="Top" Height="{Binding ElementName=menuBarPanel, Path=Height}"/>
+            <ContentControl Focusable="False" Content="{Binding JobContainer}">
+                <ContentControl.RenderTransform>
+                    <TranslateTransform Y="{Binding ElementName=optionPanel, Path=ActualHeight}" />
+                </ContentControl.RenderTransform>
+            </ContentControl>
+        </DockPanel>
+        <StackPanel VerticalAlignment="Top" DataContext="{Binding Setting}">
+            <StackPanel Name="menuBarPanel" Height="30" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <ToggleButton Name="expandOptionBtn" IsChecked="{Binding IsExpanded}">
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Image Width="27" Height="27" Opacity="0.8">
+                                <Image.Source>
+                                    <BitmapImage DecodePixelWidth="45" UriSource="/Resources/gear.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+                <Button>
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Image Width="27" Height="27" Opacity="0.8">
+                                <Image.Source>
+                                    <BitmapImage DecodePixelWidth="45" UriSource="/Resources/downloads.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:LaunchUriOrFileAction Path="{Binding ImageSaveDirectory}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+            <Border Name="optionPanel" Height="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#10000000" Offset="0" />
+                        <GradientStop Color="#00000000" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid Margin="5,0,10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0">メール:</Label>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" Text="{Binding EmailAddress}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}" />
+                    <Label Grid.Row="1" Grid.Column="0">パスワード:</Label>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" Text="{Binding Password}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}" />
+                    <Label Grid.Row="2" Grid.Column="0">画像保存先:</Label>
+                    <Grid Grid.Row="2" Grid.Column="1" Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"  Text="{Binding ImageSaveDirectory}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}"/>
+                        <Button Grid.Column="1" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">...</Button>
+                    </Grid>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Foreground="#e02020" TextWrapping="Wrap" Margin="0,5,0,5" Text="{Binding NotificationText}" />
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                        <Button Width="80" Margin="0,0,5,0" Command="{Binding CancelConfigCommand}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">キャンセル</Button>
+                        <Button Width="80" Margin="5,0,0,0" Command="{Binding SaveConfigCommand}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">保存</Button>
+                    </StackPanel>
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding ElementName=expandOptionBtn, Path=IsChecked}" Value="True">
+                            <ei:DataTrigger.Actions>
+                                <ei:ControlStoryboardAction Storyboard="{StaticResource expandOptionPanelStoryboard}" ControlStoryboardOption="Play" />
+                            </ei:DataTrigger.Actions>
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding ElementName=expandOptionBtn, Path=IsChecked}" Value="False">
+                            <ei:DataTrigger.Actions>
+                                <ei:ControlStoryboardAction Storyboard="{StaticResource dexpandOptionPanelStoryboard}" ControlStoryboardOption="Play" />
+                            </ei:DataTrigger.Actions>
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Grid>
+            </Border>
+        </StackPanel>
     </Grid>
 </Window>
