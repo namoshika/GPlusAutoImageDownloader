@@ -15,26 +15,36 @@ namespace GPlusImageDownloader.ViewModel
             EmailAddress = setting.EmailAddress;
             Password = setting.Password;
             ImageSaveDirectory = setting.ImageSaveDirectory.FullName;
+            NotificationText = string.Empty;
 
             PropertyChanged += SettingViewModel_PropertyChanged;
-            SaveConfigCommand = new RelayCommand(async obj =>
-                {
-                    IsError = !(await setting.Save(
-                        EmailAddress, Password, new System.IO.DirectoryInfo(ImageSaveDirectory)));
+            SaveConfigCommand = new RelayCommand(
+                async obj =>
+                    {
+                        NotificationText = string.Empty;
+                        Status = SettingStatusType.Checking;
+                        Status = (await setting.Save(
+                            EmailAddress, Password, new System.IO.DirectoryInfo(ImageSaveDirectory)))
+                            ? SettingStatusType.Normal : SettingStatusType.Error;
 
-                    if (IsError)
-                        return; 
-                    IsModified = false;
-                    IsExpanded = false;
-                });
-            CancelConfigCommand = new RelayCommand(obj =>
-                {
-                    EmailAddress = setting.EmailAddress;
-                    Password = setting.Password;
-                    ImageSaveDirectory = setting.ImageSaveDirectory.FullName;
-                    IsModified = false;
-                    IsExpanded = false;
-                });
+                        if (Status == SettingStatusType.Error)
+                        {
+                            NotificationText = "エラーが発生しました。メールアドレスやパスワード、画像保存先に異常がある事が考えられます。";
+                            return;
+                        }
+                        IsModified = false;
+                        IsExpanded = false;
+                    });
+            CancelConfigCommand = new RelayCommand(
+                obj =>
+                    {
+                        EmailAddress = setting.EmailAddress;
+                        Password = setting.Password;
+                        ImageSaveDirectory = setting.ImageSaveDirectory.FullName;
+                        NotificationText = string.Empty;
+                        IsModified = false;
+                        IsExpanded = false;
+                    });
         }
         void SettingViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {

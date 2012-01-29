@@ -30,7 +30,12 @@ namespace GPlusImageDownloader.Model
         public void StartDownload()
         {
             if (ImageDownloaderContainer.CheckCanAuth(Setting.Cookies))
+            {
                 Downloader.StartDownload(Setting.Cookies);
+                OnNotify(new NotifyEventArgs("ログイン成功。ストリーム監視を開始。"));
+            }
+            else
+                OnNotify(new NotifyEventArgs("ログイン失敗。"));
         }
         public void Dispose()
         {
@@ -43,7 +48,10 @@ namespace GPlusImageDownloader.Model
         {
             if (Setting.EmailAddress == e.EmailAddress
                 && Setting.Password == e.Password)
+            {
+                e.Cancel = true;
                 return;
+            }
 
             e.Cancel = !ImageDownloaderContainer.CheckCanAuth(e.EmailAddress, e.Password, out _cookies);
             if (e.Cancel)
@@ -54,5 +62,18 @@ namespace GPlusImageDownloader.Model
             Setting.Cookies = _cookies ?? Setting.Cookies;
             StartDownload();
         }
+
+        public event NotifyEventHandler Notify;
+        protected virtual void OnNotify(NotifyEventArgs e)
+        {
+            if (Notify != null)
+                Notify(this, e);
+        }
+    }
+    delegate void NotifyEventHandler(object sender, NotifyEventArgs e);
+    class NotifyEventArgs : EventArgs
+    {
+        public NotifyEventArgs(string text) { Text = text; }
+        public string Text { get; private set; }
     }
 }

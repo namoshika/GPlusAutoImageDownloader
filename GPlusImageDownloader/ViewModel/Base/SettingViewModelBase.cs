@@ -11,23 +11,25 @@ namespace GPlusImageDownloader.ViewModel
         public SettingViewModelBase()
         {
             SaveConfigCommand = new RelayCommand(obj => { IsExpanded = false; });
-            CancelConfigCommand = new RelayCommand(obj => { IsError = !IsError; });
+            CancelConfigCommand = new RelayCommand(obj => {  });
+            NotificationText = "エラーが発生しました。メールアドレスやパスワード、画像保存先に異常がある事が考えられます。";
         }
 
-        bool _isError;
         bool _isExpanded;
         bool _isModified;
         string _emailAddress;
         string _password;
         string _imageSaveDirectory;
+        string _notificationText;
+        SettingStatusType _status;
 
-        public bool IsError
+        public SettingStatusType Status
         {
-            get { return _isError; }
+            get { return _status; }
             set
             {
-                _isError = value;
-                OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("IsError"));
+                _status = value;
+                OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("Status"));
             }
         }
         public bool IsModified
@@ -80,7 +82,31 @@ namespace GPlusImageDownloader.ViewModel
                     new System.ComponentModel.PropertyChangedEventArgs("ImageSaveDirectory"));
             }
         }
+        public string NotificationText
+        {
+            get { return _notificationText; }
+            set
+            {
+                _notificationText = value;
+                OnPropertyChanged(
+                    new System.ComponentModel.PropertyChangedEventArgs("NotificationText"));
+            }
+        }
         public ICommand SaveConfigCommand { get; set; }
         public ICommand CancelConfigCommand { get; set; }
+    }
+    enum SettingStatusType { Normal, Checking, Error }
+
+    class SettingStatusToBooleanConverter : System.Windows.Data.IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var status = (SettingStatusType)value;
+            return status != SettingStatusType.Checking;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -56,7 +56,7 @@
         <local:MainWindowViewModelBase.Setting>
             <local:SettingViewModelBase
                 EmailAddress="mail" Password="pwd" ImageSaveDirectory="dir"
-                IsError="False" IsExpanded="False" IsModified="False" />
+                Status="Checking" IsExpanded="False" IsModified="False" />
         </local:MainWindowViewModelBase.Setting>
     </local:MainWindowViewModelBase>
     

@@ -11,6 +11,9 @@ namespace GPlusImageDownloader.ViewModel
         {
             JobContainer = new JobContainerViewModel(model.Downloader);
             Setting = new SettingViewModel(model.Downloader, model.Setting);
+            model.Notify += (sender, e) =>
+                App.Current.Dispatcher.BeginInvoke((Action)(() =>
+                    JobContainer.JobActivityGroups.Insert(0, new NoticeItemBase() { NoticeText = e.Text })));;
         }
 
         JobContainerViewModelBase _jobContainer;

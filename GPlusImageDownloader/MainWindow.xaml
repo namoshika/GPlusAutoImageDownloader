@@ -164,6 +164,12 @@
                             <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding NoticeText}" />
                         </StackPanel>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type local:NoticeItemBase}">
+                        <!--通知情報-->
+                        <StackPanel Orientation="Horizontal" Margin="0">
+                            <TextBlock Margin="0" VerticalAlignment="Center" Text="{Binding NoticeText}" />
+                        </StackPanel>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type local:JobViewModelBase}">
                         <ContentControl Focusable="False" Name="imgBorder" Margin="0,0,0,0">
                             <i:Interaction.Triggers>
@@ -197,11 +203,12 @@
     <Grid>
         <Grid.Resources>
             <Storyboard x:Key="expandOptionPanelStoryboard">
-                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="0" To="180" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
+                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="0" To="200" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
             </Storyboard>
             <Storyboard x:Key="dexpandOptionPanelStoryboard">
-                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="180" To="0" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
+                <DoubleAnimation Storyboard.TargetName="optionPanel" Storyboard.TargetProperty="Height" BeginTime="0:0:0" From="200" To="0" Duration="0:0:0.4" AccelerationRatio="0.01" DecelerationRatio="0.99" />
             </Storyboard>
+            <local:SettingStatusToBooleanConverter x:Key="statusToBooleanConverter" />
         </Grid.Resources>
         <DockPanel>
             <Rectangle DockPanel.Dock="Top" Height="{Binding ElementName=menuBarPanel, Path=Height}"/>
@@ -261,21 +268,22 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0">メール:</Label>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" Text="{Binding EmailAddress}" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" Text="{Binding EmailAddress}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}" />
                     <Label Grid.Row="1" Grid.Column="0">パスワード:</Label>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" Text="{Binding Password}" />
-                    <Label Grid.Row="2" Grid.Column="0">画像保存フォルダ:</Label>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" Text="{Binding Password}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}" />
+                    <Label Grid.Row="2" Grid.Column="0">画像保存先:</Label>
                     <Grid Grid.Row="2" Grid.Column="1" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0"  Text="{Binding ImageSaveDirectory}"/>
-                        <Button Grid.Column="1">...</Button>
+                        <TextBox Grid.Column="0"  Text="{Binding ImageSaveDirectory}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}"/>
+                        <Button Grid.Column="1" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">...</Button>
                     </Grid>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Foreground="#e02020" TextWrapping="Wrap" Margin="0,5,0,5" Text="{Binding NotificationText}" />
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-                        <Button Width="80" Margin="0,0,5,0" Command="{Binding CancelConfigCommand}">キャンセル</Button>
-                        <Button Width="80" Margin="5,0,0,0" Command="{Binding SaveConfigCommand}">保存</Button>
+                        <Button Width="80" Margin="0,0,5,0" Command="{Binding CancelConfigCommand}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">キャンセル</Button>
+                        <Button Width="80" Margin="5,0,0,0" Command="{Binding SaveConfigCommand}" IsEnabled="{Binding Status, Converter={StaticResource statusToBooleanConverter}}">保存</Button>
                     </StackPanel>
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding ElementName=expandOptionBtn, Path=IsChecked}" Value="True">
