@@ -16,16 +16,17 @@ namespace GPlusImageDownloader.Model
             DownloadJobs = new List<ImageDownloader>();
             Setting = setting;
         }
-        ~ImageDownloaderContainer()
-        { Dispose(); }
+        ~ImageDownloaderContainer() { Dispose(); }
         PlatformClient _client;
         IDisposable _stream;
 
+        public bool IsWatchingStream { get; private set; }
         public List<ImageDownloader> DownloadJobs { get; private set; }
         public SettingManager Setting { get; private set; }
 
         public void StartDownload(System.Net.CookieContainer cookies)
         {
+            IsWatchingStream = true;
             _client = new PlatformClient(cookies);
             if (_stream != null)
                 _stream.Dispose();
@@ -49,7 +50,7 @@ namespace GPlusImageDownloader.Model
                         foreach (var job in imgs)
                             job.Download();
                     },
-                    exp => Console.WriteLine("Excp: {0}", exp.Message));
+                    exp => OnRaiseError(new RaiseErrorEventArgs(exp)));
         }
         public void Dispose()
         {
@@ -64,6 +65,13 @@ namespace GPlusImageDownloader.Model
             if (AddedDownloadingImage != null)
                 AddedDownloadingImage(this, e);
         }
+        public event RaiseErrorEventHandler RaiseError;
+        protected virtual void OnRaiseError(RaiseErrorEventArgs e)
+        {
+            IsWatchingStream = false;
+            if (RaiseError != null)
+                RaiseError(this, e);
+        }
 
         public static bool CheckCanAuth(string mail, string pass, out System.Net.CookieContainer cookies)
         {
@@ -76,6 +84,7 @@ namespace GPlusImageDownloader.Model
             return cookies.GetCookies(new Uri("https://plus.google.com"))["SSID"] != null;
         }
     }
+
     delegate void DownloadingImageEventHandler(object sender, DownloadingImageEventArgs e);
     class DownloadingImageEventArgs : EventArgs
     {
@@ -86,5 +95,11 @@ namespace GPlusImageDownloader.Model
         }
         public ActivityInfo ParentActivity { get; private set; }
         public ImageDownloader[] Downloader { get; private set; }
+    }
+    delegate void RaiseErrorEventHandler(object sender, RaiseErrorEventArgs e);
+    class RaiseErrorEventArgs : EventArgs
+    {
+        public RaiseErrorEventArgs(Exception e) { ThrowedException = e; }
+        public Exception ThrowedException { get; private set; }
     }
 }

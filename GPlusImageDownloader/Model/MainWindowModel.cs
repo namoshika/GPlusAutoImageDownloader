@@ -13,13 +13,7 @@ namespace GPlusImageDownloader.Model
             Setting.SavingSetting += Setting_SavingSetting;
             Setting.SavedSetting += Setting_SavedSetting;
             Downloader = new ImageDownloaderContainer(Setting);
-        }
-        public MainWindowModel(SettingManager setting, ImageDownloaderContainer downloader)
-        {
-            Setting = setting;
-            Setting.SavingSetting += Setting_SavingSetting;
-            Setting.SavedSetting += Setting_SavedSetting;
-            Downloader = downloader;
+            Downloader.RaiseError += Downloader_RaiseError;
         }
         ~MainWindowModel() { Dispose(); }
         System.Net.CookieContainer _cookies;
@@ -40,19 +34,25 @@ namespace GPlusImageDownloader.Model
         public void Dispose()
         {
             System.GC.SuppressFinalize(this);
-            if (Downloader != null)
-                Downloader.Dispose();
+            Downloader.Dispose();
         }
 
         void Setting_SavingSetting(object sender, SavingSettingEventArgs e)
         {
-            if (Setting.EmailAddress == e.EmailAddress
-                && Setting.Password == e.Password)
+            //設定が変更された場合、その変更が有効なものであるかをチェックする
+            //そして変更が無効である場合にはe.Cancel = trueにする事で設定変更
+            //をキャンセルする。
+
+            if (string.IsNullOrEmpty(e.EmailAddress) || string.IsNullOrEmpty(e.Password) ||
+                Setting.EmailAddress == e.EmailAddress && Setting.Password == e.Password
+                && Downloader.IsWatchingStream)
             {
                 e.Cancel = true;
                 return;
             }
-
+            //変更されたログイン情報を元に再ログインする。ログインに失敗した場合には
+            //e.Cancel = trueにする。成功した場合には_cookiesにログイン済みクッキーを入れ、
+            //SavedSettingで設定変更が確定した時にSetting.Cookiesを更新する。
             e.Cancel = !ImageDownloaderContainer.CheckCanAuth(e.EmailAddress, e.Password, out _cookies);
             if (e.Cancel)
                 _cookies = null;
@@ -61,6 +61,11 @@ namespace GPlusImageDownloader.Model
         {
             Setting.Cookies = _cookies ?? Setting.Cookies;
             StartDownload();
+        }
+        void Downloader_RaiseError(object sender, RaiseErrorEventArgs e)
+        {
+            OnNotify(new NotifyEventArgs(
+                string.Format("エラーが発生しました。\r\n{0}", e.ThrowedException.Message)));
         }
 
         public event NotifyEventHandler Notify;

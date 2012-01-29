@@ -10,6 +10,9 @@ namespace GPlusImageDownloader.Model
     {
         public SettingManager()
         {
+            _cookieFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            _imageHashSerializer = new System.Xml.Serialization.XmlSerializer(typeof(HashSet<string>));
+
             //設定ファイル読み込み
             EmailAddress = GPlusImageDownloader.Properties.Settings.Default.EmailAddress;
             Password = GPlusImageDownloader.Properties.Settings.Default.Password;
@@ -36,6 +39,8 @@ namespace GPlusImageDownloader.Model
             SerializeCookie(Cookies);
             SerializeHashes(ImageHashList);
         }
+        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter _cookieFormatter;
+        System.Xml.Serialization.XmlSerializer _imageHashSerializer;
 
         public string EmailAddress { get; private set; }
         public string Password { get; private set; }
@@ -78,45 +83,41 @@ namespace GPlusImageDownloader.Model
         }
         void SerializeCookie(System.Net.CookieContainer cookies)
         {
-            var serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             var cookiePath = new System.IO.FileInfo(string.Format("{0}\\{1}\\cookie",
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 System.Reflection.Assembly.GetEntryAssembly().GetName().Name));
             using (var strm = cookiePath.Open(System.IO.FileMode.Create, System.IO.FileAccess.Write))
-                serializer.Serialize(strm, cookies);
+                _cookieFormatter.Serialize(strm, cookies);
         }
         void SerializeHashes(HashSet<string> imageHashes)
         {
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(HashSet<string>));
             var hashesPath = new System.IO.FileInfo(string.Format("{0}\\{1}\\imageHashes.xml",
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 System.Reflection.Assembly.GetEntryAssembly().GetName().Name));
             using (var strm = hashesPath.Open(System.IO.FileMode.Create, System.IO.FileAccess.Write))
-                serializer.Serialize(strm, imageHashes);
+                _imageHashSerializer.Serialize(strm, imageHashes);
         }
         System.Net.CookieContainer DeserializeCookie()
         {
-            var serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             var cookiePath = new System.IO.FileInfo(string.Format("{0}\\{1}\\cookie",
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                System.Reflection.Assembly.GetEntryAssembly().GetName().Name));
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().Name));
 
             if (cookiePath.Exists)
                 using (var strm = cookiePath.OpenRead())
-                    return (System.Net.CookieContainer)serializer.Deserialize(strm);
+                    return (System.Net.CookieContainer)_cookieFormatter.Deserialize(strm);
             else
                 return new System.Net.CookieContainer();
         }
         HashSet<string> DeserializeHashes()
         {
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(HashSet<string>));
             var hashesPath = new System.IO.FileInfo(string.Format("{0}\\{1}\\imageHashes.xml",
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 System.Reflection.Assembly.GetEntryAssembly().GetName().Name));
 
             if (hashesPath.Exists)
                 using (var strm = hashesPath.OpenRead())
-                    return (HashSet<string>)serializer.Deserialize(strm);
+                    return (HashSet<string>)_imageHashSerializer.Deserialize(strm);
             else
                 return new HashSet<string>();
         }
