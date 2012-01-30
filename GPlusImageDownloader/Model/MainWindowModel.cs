@@ -43,23 +43,36 @@ namespace GPlusImageDownloader.Model
             //そして変更が無効である場合にはe.Cancel = trueにする事で設定変更
             //をキャンセルする。
 
-            if (string.IsNullOrEmpty(e.EmailAddress) || string.IsNullOrEmpty(e.Password) ||
-                Setting.EmailAddress == e.EmailAddress && Setting.Password == e.Password
-                && Downloader.IsWatchingStream)
+            //EmailAddress, Passwordが空文字だった場合には設定保存をキャンセルする。
+            if (string.IsNullOrEmpty(e.EmailAddress) || string.IsNullOrEmpty(e.Password))
             {
                 e.Cancel = true;
+                _cookies = null;
                 return;
             }
-            //変更されたログイン情報を元に再ログインする。ログインに失敗した場合には
-            //e.Cancel = trueにする。成功した場合には_cookiesにログイン済みクッキーを入れ、
-            //SavedSettingで設定変更が確定した時にSetting.Cookiesを更新する。
-            e.Cancel = !ImageDownloaderContainer.CheckCanAuth(e.EmailAddress, e.Password, out _cookies);
-            if (e.Cancel)
+            //EmailAddress, Passwordに変化がある場合、あるいはストリーム監視中でなかった場合
+            //には再ログイン処理を行う。
+            if (Setting.EmailAddress != e.EmailAddress || Setting.Password != e.Password
+                || !Downloader.IsWatchingStream)
+            {
+                //変更されたログイン情報を元に再ログインする。ログインに失敗した場合には
+                //e.Cancel = trueにする。成功した場合には_cookiesにログイン済みクッキーを入れ、
+                //SavedSettingで設定変更が確定した時にSetting.Cookiesを更新する。
+                e.Cancel = !ImageDownloaderContainer.CheckCanAuth(e.EmailAddress, e.Password, out _cookies);
+                if (e.Cancel)
+                    _cookies = null;
+            }
+            //何も変化が無く、ストリーム監視中だった場合には設定保存を許可しつつ、
+            //後のSetting_SavedSettingでSetting.Cookiesを更新して再接続しないようにする。
+            else
                 _cookies = null;
         }
         void Setting_SavedSetting(object sender, EventArgs e)
         {
-            Setting.Cookies = _cookies ?? Setting.Cookies;
+            if (_cookies == null)
+                return;
+
+            Setting.Cookies = _cookies;
             StartDownload();
         }
         void Downloader_RaiseError(object sender, RaiseErrorEventArgs e)
