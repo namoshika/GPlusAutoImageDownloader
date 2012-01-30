@@ -24,8 +24,13 @@ namespace GPlusImageDownloader.ViewModel
                         if (_model.DownloadedImageFile == null)
                             return false;
 
-                        _model.DownloadedImageFile.Refresh();
-                        return _model.DownloadedImageFile != null && model.DownloadedImageFile.Exists;
+                        //OpenImageCommandを呼び出せるかチェックする際にDownloadStatus
+                        //を更新することで、画像を落とした後にその画像を削除し、その上
+                        //で画像のサムネイルをダブルクリックした時にサムネイルの状態を
+                        //更新する用にした。
+                        _model.RefreshStatus();
+                        DownloadStatus = _model.Status;
+                        return _model.Status == Model.DownloadStatus.Loaded;
                     });
         }
         ImageDownloader _model;
