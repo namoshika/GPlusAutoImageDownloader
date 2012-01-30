@@ -223,6 +223,12 @@
                             </Storyboard>
                             <!--delete時の画像出現の定義-->
                             <Storyboard x:Key="deletedStoryboard">
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="statusLabel" Storyboard.TargetProperty="Visibility">
+                                    <ObjectKeyFrameCollection>
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                                    </ObjectKeyFrameCollection>
+                                </ObjectAnimationUsingKeyFrames>
+                                <DoubleAnimation Storyboard.TargetName="statusLabel" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4" />
                                 <DoubleAnimation Storyboard.TargetName="imgBorder" Storyboard.TargetProperty="Opacity" From="0" To="0.5" Duration="0:0:0.4" />
                             </Storyboard>
                         </DataTemplate.Resources>

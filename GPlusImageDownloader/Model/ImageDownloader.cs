@@ -78,6 +78,14 @@ namespace GPlusImageDownloader.Model
                     }
                 });
         }
+        public void RefreshStatus()
+        {
+            if (Status == DownloadStatus.Loaded)
+            {
+                DownloadedImageFile.Refresh();
+                Status = DownloadedImageFile.Exists ? DownloadStatus.Loaded : DownloadStatus.Deleted;
+            }
+        }
         public void Open()
         {
             System.Diagnostics.Process.Start(DownloadedImageFile.FullName);
