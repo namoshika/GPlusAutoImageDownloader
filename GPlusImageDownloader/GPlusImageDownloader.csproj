@@ -155,12 +155,9 @@
   <ItemGroup>
     <Resource Include="Resources\delete.png" />
     <Resource Include="license.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\gear.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\downloads.png" />
+    <Resource Include="Resources\testThumb.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
