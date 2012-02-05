@@ -31,11 +31,11 @@ namespace GPlusImageDownloader.Model
             if (_stream != null)
                 _stream.Dispose();
 
-            _stream = _client.GetStream()
+            _stream = _client.Activities.GetStream()
                 .OfType<CommentInfo>()
                 //.Where(cmmInf => cmmInf.Html.Contains("ふぅ") || cmmInf.Owner.Name.Result.Contains("lome"))
                 .Distinct(commentInfo => commentInfo.ParentActivity.Id)
-                .Select(commentInfo => commentInfo.ParentActivity.UpdateActivityAsync(false).Result)
+                .Select(commentInfo => commentInfo.ParentActivity.UpdateGetActivityAsync(false).Result)
                 .Where(activityInfo => activityInfo.PostStatus != PostStatusType.Removed && activityInfo.AttachedContentType == ContentType.Image)
                 .Select(activityInfo => new
                 {
